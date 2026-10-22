@@ -1,0 +1,33 @@
+{
+  "name": "presu",
+  "private": true,
+  "type": "module",
+  "engines": {
+    "node": ">=22"
+  },
+  "scripts": {
+    "dev": "xmcp dev",
+    "build": "xmcp build",
+    "start": "node dist/http.js",
+    "migrate": "tsx src/migrate.ts",
+    "test": "tsx --test test/*.test.ts",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@opentelemetry/api": "^1.10.0",
+    "@xmcp-dev/better-auth": "1.0.0",
+    "pdfkit": "^0.20.2",
+    "pg": "^8.23.1",
+    "viem": "^2.57.10",
+    "xmcp": "1.9.0",
+    "zod": "^4.6.7"
+  },
+  "devDependencies": {
+    "@types/node": "^22.20.5",
+    "@types/pdfkit": "^0.17.6",
+    "@types/pg": "^8.23.1",
+    "@xmcp-dev/compiler": "1.9.0",
+    "tsx": "^4.23.15",
+    "typescript": "^5.9.3"
+  }
+}

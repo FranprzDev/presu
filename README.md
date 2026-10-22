@@ -10,13 +10,13 @@ Al terminar, Presu genera un PDF que presenta el alcance y una cotización comer
 - El proyecto, la conversación, los documentos y el alcance deben poder guardarse y retomarse.
 - El modelo determina ambigüedades relevantes; cada ambigüedad debe explicar qué decisión o estimación podría cambiar.
 - No se genera una cotización final mientras queden ambigüedades que bloqueen definir el alcance.
-- BNB Chain forma parte de la primera versión, sujeto a resolver el modelo de monetización y las reglas de ChatGPT.
-- La propuesta de uso es cinco créditos gratuitos para generar cotizaciones y diez usos gratuitos de *grilling with docs*; los créditos de cotización y los usos de grilling son contadores separados.
+- Cada cuenta de Presu recibe cinco créditos gratuitos para cotizaciones; los diez usos gratuitos de *grilling with docs* se cuentan por separado.
+- Los pagos adicionales se preparan para la web de Presu con BNB nativo (tBNB) en BSC Testnet. ChatGPT no inicia ni enlaza compras; el uso de créditos pagados desde el plugin requiere aprobación de OpenAI.
 - Se toma [ScopeProfit](https://github.com/FranprzDev/ScopeProfit) como base funcional para el flujo de proyectos, documentos, alcance, estimaciones y PDF.
 
-## Restricción de plataforma por resolver
+## Restricción de plataforma
 
-Las reglas actuales de plugins de ChatGPT permiten comercio de bienes físicos, pero no vender productos o servicios digitales, incluidas suscripciones y créditos, ni siquiera mediante una oferta freemium. El plugin puede explicar que una función requiere otro nivel de acceso, pero no iniciar ni enlazar un checkout. Por eso, el esquema “cinco gratis y cobrar desde el sexto” no puede implementarse dentro del plugin sin resolver antes esta restricción. [Reglas de plugins de OpenAI](https://developers.openai.com/plugins/plugin-guidelines)
+Las reglas actuales de plugins de ChatGPT prohíben vender créditos digitales dentro del plugin, incluso mediante upsell freemium. ChatGPT no inicia ni enlaza compras. Hasta obtener aprobación para el uso de créditos pagados, el plugin no debe consumirlos ni promocionarlos; la compra BNB se desarrolla para la web de Presu. [Reglas de plugins de OpenAI](https://developers.openai.com/plugins/plugin-guidelines)
 
 ## Base del producto
 

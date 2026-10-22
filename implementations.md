@@ -1,6 +1,6 @@
 # Implementación de Presu
 
-Plan de trabajo para implementar Presu sobre ScopeProfit y poder repartirlo entre agentes con tareas acotadas. Este documento define producto y dependencias; todavía no autoriza cambios en ScopeProfit, despliegues ni transacciones on-chain.
+Plan de trabajo para implementar Presu sobre ScopeProfit y repartirlo entre agentes con tareas acotadas. Este brief cierra el alcance de créditos y pagos BNB para que otro agente implemente el flujo. Autoriza cambios locales en la rama de implementación; no autoriza mainnet, fondos reales ni publicación.
 
 ## Objetivo de v1
 
@@ -12,7 +12,7 @@ Desde ChatGPT, un cliente crea y guarda un proyecto, conversa para especificar u
 
 Las reglas publicadas actualmente por OpenAI dicen que los plugins pueden vender bienes físicos, pero no productos o servicios digitales, suscripciones, contenido, tokens ni créditos, incluso como upsell freemium. Permiten explicar que una función requiere otro entitlement y enlazar una página informativa, pero prohíben iniciar el pago o enlazar checkout/transacciones. Esto entra en conflicto directo con cobrar desde la sexta cotización y vender suscripción luego de los diez usos de grilling.
 
-**Gate P0:** antes de desarrollar cobros, decidir una experiencia compatible con las reglas vigentes o confirmar por escrito que una política/plataforma actualizada permite el modelo. Hasta resolverlo, el plugin podrá mostrar el estado y explicar que la función no está disponible; no implementar compra, wallet prompt, checkout, ni promoción de upgrade desde ChatGPT. Un cobro externo tampoco se debe iniciar ni enlazar desde el plugin sin confirmación de compatibilidad.
+**Gate P0:** las reglas vigentes no permiten vender créditos digitales dentro del plugin, incluso como upsell freemium, ni iniciar o enlazar su compra desde ChatGPT. Los pagos BNB se implementan únicamente en la web de Presu. Hasta que OpenAI apruebe explícitamente el uso de créditos pagados en el plugin, ChatGPT no los consulta, consume ni promociona; tampoco ofrece checkout ni wallet prompts.
 
 Fuente: [OpenAI Plugin Guidelines — Commerce and monetization](https://developers.openai.com/plugins/plugin-guidelines).
 
@@ -30,10 +30,11 @@ Fuente: [OpenAI Plugin Guidelines — Commerce and monetization](https://develop
 | Decisión | Propuesta de trabajo | Estado |
 |---|---|---|
 | Categorías de cotización | Limitar el primer catálogo a productos de software/digitales que ScopeProfit pueda estimar con su modelo actual | Confirmar antes del catálogo |
-| Créditos gratis | 5 cotizaciones exitosamente emitidas por cuenta | Definición de trabajo |
+| Créditos gratis | 5 cotizaciones finales emitidas por cuenta de Presu | Confirmado |
 | Grilling gratuito | Hasta 10 inicios de proyecto con grilling por cuenta; seguir conversando o adjuntar docs dentro del mismo proyecto no consume otro uso | Semántica propuesta; confirmar |
-| Cobro después del uso gratis | Requiere resolver el gate de política OpenAI; no fijar precio ni flujo aún | Bloqueado por P0 |
-| BNB | Usar BNB Chain como red de pago en v1; moneda/token, red exacta y protocolo quedan por definir | Red confirmada; resto abierto |
+| Cobro después del uso gratis | Web de Presu; un pago exitoso acredita un crédito de cotización. El precio en wei se configura en backend y no se fija en este brief | Confirmado para testnet |
+| BNB | BNB nativo en BSC Testnet (chain ID 97), transferencia directa a una dirección receptora configurada. Sin contrato propio | Confirmado para testnet |
+| Compra desde ChatGPT | No iniciar ni enlazar compras. Consumir créditos pagados desde el plugin queda deshabilitado hasta aprobación explícita de OpenAI | Confirmado como gate |
 | Moneda de cotización | Mostrar importe fiduciario según RateCard; no denominar en BNB por defecto | Propuesta |
 | “Idea viable” | Decir “alcance suficientemente definido e implementable” solo si no hay ambigüedades bloqueantes; mostrar evidencia y límites | Definición de trabajo |
 | Fuente de la tarifa | Reutilizar RateCard existente; definir qué RateCard y moneda aplican al usuario ChatGPT | Pendiente |
@@ -41,28 +42,40 @@ Fuente: [OpenAI Plugin Guidelines — Commerce and monetization](https://develop
 
 Una **ambigüedad bloqueante** es un dato ausente, contradictorio o vago que puede cambiar entregables, aceptación, estimación o cotización. El modelo debe registrar pregunta, evidencia/origen, impacto y condición bloqueante. Una respuesta del modelo no es evidencia de mercado por sí misma.
 
+## Decisiones cerradas para créditos y BNB
+
+- Los créditos pertenecen a una cuenta autenticada de Presu y no se aplican a las cuentas ni a las cotizaciones profesionales existentes de ScopeProfit.
+- Una cuenta recibe cinco créditos gratuitos una sola vez. Cada cotización final consume uno únicamente cuando sus datos y PDF quedan emitidos/persistidos; los borradores, errores y reintentos idempotentes no consumen otro crédito.
+- Los diez inicios gratuitos de *grilling* siguen siendo un contador separado. Una cotización no consume un uso de *grilling* y viceversa.
+- La compra de créditos se hace en la web de Presu, fuera del plugin. El backend acredita el saldo para uso en la web; no exponer ni consumir créditos pagados desde ChatGPT hasta obtener aprobación explícita de OpenAI.
+- El MVP de pagos usa transferencias de BNB nativo en BSC Testnet, chain ID 97. La documentación BNB identifica tBNB como el activo de testnet. [Redes y configuración oficiales de BNB](https://docs.bnbchain.org/bnb-smart-chain/developers/wallet-configuration/).
+- La cantidad a pagar se expresa en wei y se configura solo en backend; no se muestra ni se acepta un precio enviado por el modelo o el navegador. Si falta el precio o la dirección receptora, no se crean intenciones de pago.
+- El verificador valida en backend la red, el hash único, el remitente vinculado a la cuenta, el destinatario configurado, el importe exacto, el estado exitoso del recibo y las confirmaciones requeridas. Una wallet se vincula a la cuenta mediante una prueba firmada; conocer un hash de transacción no basta para reclamar créditos.
+- Las claves privadas nunca se guardan ni se usan en Presu. El backend solo observa la cadena y acredita cada transacción como máximo una vez.
+- Mainnet, fondos reales, precio comercial final y política de reembolsos requieren una decisión y autorización posteriores.
+
 ## Tareas del swarm
 
 Las rutas bajo `scope-to-profit/` se refieren al repositorio base, no a este repo Presu. Asignar un agente por tarea. El agente coordinador integra y es el único que modifica Prisma/contratos compartidos; los demás deben trabajar contra los contratos acordados y no editarlos.
 
-### P0 — Cerrar restricciones y decisiones de v1
+### P0 — Cerrar restricciones y decisiones restantes de v1
 
-**Responsable:** producto/arquitectura. **Dependencias:** ninguna. **Bloquea:** P1–P7.
+**Responsable:** producto/arquitectura. **Dependencias:** ninguna. Bloquea las tareas que dependan de decisiones aún pendientes; el ledger de cotizaciones y el verificador de BSC Testnet pueden comenzar con los acuerdos cerrados en este brief.
 
-- Resolver el gate de monetización de ChatGPT con la política oficial vigente. Si no hay ruta compatible, definir qué ofrece el plugin gratis y dónde existe una oferta de pago permitida sin iniciar ni enlazar una transacción desde ChatGPT.
+- Mantener el gate de monetización de ChatGPT: no vender, promocionar, consumir ni iniciar/enlazar compras de créditos desde el plugin. Los pagos del MVP se completan en la web de Presu; solicitar aprobación antes de cambiar este límite.
 - Confirmar qué planes/cuentas de ChatGPT pueden crear, conectar y usar el plugin MCP en el momento de implementación; no basar la disponibilidad de Presu en la respuesta antigua sobre GPT Actions.
-- Confirmar categorías iniciales, RateCard/moneda, semántica de los dos contadores y política de reintentos/refundos.
-- Definir token aceptado y protocolo de pago BNB Chain, red (testnet/mainnet), confirmaciones necesarias, expiración, reembolsos y manejo de pagos duplicados o tardíos.
+- Confirmar categorías iniciales, RateCard/moneda, semántica del contador de *grilling* y política de reembolsos.
+- Configurar el importe en wei por crédito, dirección receptora, RPC y mínimo de confirmaciones en el entorno de testnet; si falta algún valor requerido, deshabilitar la compra. No configurar ni habilitar mainnet.
 - Elegir dónde vive el producto ejecutable: extensión de ScopeProfit o repo separado que consuma su API. Recomendación inicial: implementar en ScopeProfit y conservar Presu para brief/decisiones.
 - Entregar decisiones en una tabla cerrada y actualizar este archivo antes de iniciar tareas que dependan de ellas.
 
-**Aceptación:** todas las decisiones que cambian contratos, UX, seguridad o cobro tienen dueño y valor; el gate de política tiene evidencia enlazada; ningún agente implementa un flujo de cobro incompatible.
+**Aceptación:** las decisiones necesarias para el MVP de créditos/BNB están en la sección anterior; las decisiones restantes tienen dueño y valor antes de implementar las funciones que dependen de ellas; ningún agente implementa checkout en ChatGPT.
 
 ### P1 — Modelo persistente y contratos
 
-**Responsable:** backend lead. **Dependencias:** P0. **Propiedad exclusiva:** `apps/api/prisma/schema.prisma`, migraciones y contratos compartidos.
+**Responsable:** backend lead. **Dependencias:** identidad autenticada y decisiones de créditos/BNB de este brief. **Propiedad exclusiva:** `apps/api/prisma/schema.prisma`, migraciones y contratos compartidos.
 
-- Extender el modelo existente solo para datos faltantes: propiedad del usuario ChatGPT, estado de grilling, ledger de usos/entitlements y referencias de pagos verificables si P0 los habilita.
+- Extender el modelo existente solo para datos faltantes: cuenta de Presu separada de los usuarios profesionales de ScopeProfit, ledger de créditos y referencias verificables de pagos BNB.
 - Definir operaciones atómicas/idempotentes para consumir un uso, crear cotización y acreditar pago. Fallos de LLM, PDF o pago no deben consumir ni duplicar créditos.
 - Mantener enumeraciones de dominio como enums de Prisma y DTOs validados.
 - Publicar contratos estables y ejemplos de request/response para que P2–P6 integren sin tocar schema ni contratos.
@@ -103,17 +116,19 @@ Las rutas bajo `scope-to-profit/` se refieren al repositorio base, no a este rep
 
 **Aceptación:** PDF descargable legible, con scope y cifras provenientes de una versión concreta del Brief/RateCard; no hay emisión final con bloqueadores; doble invocación no duplica el cargo ni el documento.
 
-### P5 — Entitlements y BNB Chain
+### P5 — Créditos y pagos BNB Chain
 
-**Responsable:** pagos. **Dependencias:** P0 y P1; cobro bloqueado por el gate de política.
+**Responsable:** pagos. **Dependencias:** modelo/contratos P1 y configuración de BSC Testnet; la compra se sirve desde la web de Presu.
 
-- Implementar contadores separados: 5 cotizaciones gratis y 10 inicios de grilling gratis según semántica confirmada.
-- Si el gate permite cobros compatibles, construir verificación de pagos BNB Chain en backend, asociando usuario, intención, importe/token/red, transacción y entitlement acreditado. Nunca confiar en un mensaje del modelo como prueba de pago.
-- Evitar claves privadas en ChatGPT, prompts, logs o cliente; verificar emisor, destinatario, contrato/token, importe, red, estado y confirmaciones según la decisión P0.
-- Empezar solo en testnet. No desplegar contratos ni transferir fondos reales como parte de esta tarea.
+- Acreditar cinco créditos de cotización gratis una sola vez por cuenta de Presu y descontar uno solo al emitir la cotización final con PDF persistido; conservar separado el contador de *grilling*.
+- La web de Presu crea una intención de pago con un crédito y el importe calculado por el backend; la wallet del usuario firma una transferencia de tBNB al destinatario configurado. El importe y la dirección nunca se aceptan del navegador como autoridad.
+- Vincular la wallet a la cuenta con un desafío de un solo uso firmado; asociar la transacción a esa cuenta y acreditar el ledger en una operación idempotente.
+- Verificar chain ID 97, hash no usado, remitente, destinatario, importe en wei, `receipt.status` exitoso y número de confirmaciones. No depender de afirmaciones del modelo ni de la respuesta del cliente.
+- Si la transferencia es válida pero aún no alcanza las confirmaciones requeridas, mantenerla pendiente. Importe incorrecto o transacción fallida no acredita créditos y queda registrada para revisión; no inferir reembolso automático.
+- No exponer saldo comprado ni habilitar su consumo, compra, wallet prompt, pago o enlace transaccional en herramientas/UI de ChatGPT. No guardar claves privadas ni desplegar contrato.
 - Evaluar BNB Agent Studio/`bag` únicamente como herramienta de generación de seller agents; no asumir que implementa el ledger de créditos ni que es necesario para el MCP de Presu. Referencia: [BNB Agent Studio quickstart](https://docs.bnbchain.org/developer-kit/bnbchain-studio/quickstart/).
 
-**Aceptación:** pruebas con pagos simulados/testnet cubren pago válido, red/token/importe incorrectos, duplicado, pago tardío y reversión/error; entitlement se acredita como máximo una vez. No habilitar compra en el plugin si la política no la permite.
+**Aceptación:** pruebas cubren la concesión inicial única, consumo y reintentos, pago válido, red/remitente/destinatario/importe incorrectos y hash duplicado; transferencias sin éxito quedan registradas y las que esperan confirmaciones siguen pendientes. Ninguna compra se inicia desde ChatGPT.
 
 ### P6 — Plugin MCP de ChatGPT
 
@@ -122,6 +137,7 @@ Las rutas bajo `scope-to-profit/` se refieren al repositorio base, no a este rep
 - Exponer herramientas pequeñas y documentadas para crear/listar/abrir proyecto, añadir respuesta/documento, obtener preguntas y alcance, consultar estado de acceso y solicitar/descargar PDF.
 - Aplicar OAuth/identidad con permisos mínimos; herramienta de mutación verifica propiedad de proyecto en backend.
 - Añadir instrucciones/skill de uso que hagan que ChatGPT conduzca el grilling, cite documentos, pregunte antes de cerrar dudas y no invente estimaciones o pagos.
+- Las herramientas no exponen compra, checkout, wallet prompts ni enlaces transaccionales. No consumen créditos pagados hasta la aprobación indicada en P0.
 - Mantener UI embebida opcional para seleccionar proyecto, ver preguntas y abrir PDF; las herramientas deben funcionar sin UI.
 
 **Aceptación:** desde un chat nuevo, el usuario autenticado puede empezar, guardar, retomar y terminar un proyecto; intentos sobre proyecto ajeno se rechazan; respuesta de herramienta distingue bloqueo, error y resultado.
@@ -169,7 +185,7 @@ flowchart TD
   P7 --> P8[P8 integración y aceptación]
 ```
 
-P2, P3, P4 y P5 pueden avanzar en paralelo después de acordar el contrato P1, siempre que cada responsable respete la propiedad de archivos. P5 puede diseñar/testear verificación sin habilitar compra mientras siga abierto el gate P0. P6 puede preparar metadatos MCP y herramientas mock mientras espera los servicios.
+P2, P3, P4 y P5 pueden avanzar en paralelo después de acordar el contrato P1, siempre que cada responsable respete la propiedad de archivos. P5 puede implementar la compra web y verificación en BSC Testnet; ChatGPT sigue sin usar créditos pagados hasta que la política lo permita. P6 puede preparar metadatos MCP y herramientas mock mientras espera los servicios.
 
 ## Criterios de salida de v1
 
@@ -178,9 +194,9 @@ P2, P3, P4 y P5 pueden avanzar en paralelo después de acordar el contrato P1, s
 - Presu no afirma validación de mercado por falta de evidencia y no presenta como lista una propuesta con bloqueos.
 - El PDF integra alcance y cotización calculada desde datos guardados y permite identificar la versión usada.
 - Los usos gratuitos se cuentan con reglas separadas e idempotentes.
-- La integración contempla BNB Chain; la compra efectiva solo se habilita si resuelve el gate de políticas y P0 cerró red/token/protocolo.
+- ChatGPT consume solo créditos gratuitos hasta que la política permita otra cosa; las compras BNB del MVP ocurren en la web de Presu y solo en BSC Testnet.
 - El flujo de desarrollo local mediante ngrok HTTPS y `/mcp` está documentado y probado.
 
 ## No incluido todavía
 
-Precio del producto, contratación de suscripción, checkout, red/token de BNB, despliegue de contrato, transacciones mainnet, publicación pública del plugin, investigación de mercado automatizada y categorías de presupuesto fuera de software. Cada punto requiere las decisiones indicadas en P0.
+Precio comercial definitivo, reembolsos, mainnet/fondos reales, compra de créditos desde ChatGPT, suscripciones, despliegue de contrato, publicación pública del plugin, investigación de mercado automatizada y categorías de presupuesto fuera de software. Cada punto requiere una decisión posterior.

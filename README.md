@@ -5,7 +5,6 @@ Presu ayuda a una persona con una idea de producto a convertirla en un alcance c
 Al terminar, Presu genera un PDF que presenta el alcance y una cotización comercial basada en ese alcance. El cliente no ingresa un monto máximo para que el sistema adapte el alcance: “presupuesto” se refiere al documento de propuesta/cotización generado. La evaluación de Presu indica si el proyecto está suficientemente definido y parece implementable; no afirma que exista demanda de mercado sin evidencia.
 
 ## Producto definido
-
 - La persona que conversa con Presu es el cliente y tiene una cuenta de ChatGPT compatible con la experiencia.
 - El proyecto, la conversación, los documentos y el alcance deben poder guardarse y retomarse.
 - El modelo determina ambigüedades relevantes; cada ambigüedad debe explicar qué decisión o estimación podría cambiar.
@@ -13,6 +12,20 @@ Al terminar, Presu genera un PDF que presenta el alcance y una cotización comer
 - Cada cuenta de Presu recibe cinco créditos gratuitos para cotizaciones; los diez usos gratuitos de *grilling with docs* se cuentan por separado.
 - Los pagos adicionales se preparan para la web de Presu con BNB nativo (tBNB) en BSC Testnet. ChatGPT no inicia ni enlaza compras; el uso de créditos pagados desde el plugin requiere aprobación de OpenAI.
 - Se toma [ScopeProfit](https://github.com/FranprzDev/ScopeProfit) como base funcional para el flujo de proyectos, documentos, alcance, estimaciones y PDF.
+
+## Desarrollo local
+
+Requiere Node.js 22+, pnpm y PostgreSQL. Copiá `.env.example` a `.env`, configurá una base local y un secreto Better Auth aleatorio, y luego ejecutá:
+
+```sh
+pnpm install
+pnpm migrate
+pnpm dev
+```
+
+El endpoint MCP es `/mcp`. Better Auth ofrece registro e inicio de sesión por email y contraseña y OAuth para clientes MCP. Las herramientas guardan proyectos, mensajes y versiones de alcance por usuario; `issue_quote` bloquea alcances con preguntas pendientes y emite un PDF con la tarifa configurada. La primera cotización persistida descuenta un crédito gratuito. Esta versión no implementa todavía la compra o verificación de pagos BNB; no configures mainnet ni fondos reales.
+
+Validá los cambios con `pnpm typecheck`, `pnpm test` y `pnpm build`.
 
 ## Restricción de plataforma
 

@@ -1,6 +1,6 @@
 # Implementación de Presu
 
-Plan de trabajo para implementar Presu sobre ScopeProfit y repartirlo entre agentes con tareas acotadas. Este brief cierra el alcance de créditos y pagos BNB para que otro agente implemente el flujo. Autoriza cambios locales en la rama de implementación; no autoriza mainnet, fondos reales ni publicación.
+Plan de trabajo para implementar Presu como producto y backend independientes. ScopeProfit sirve como referencia funcional para proyectos, documentos, alcance y cotizaciones; Presu no comparte su runtime, cuentas, persistencia ni contratos. Este brief cierra el alcance de créditos y pagos BNB. Autoriza cambios locales en la rama de implementación; no autoriza mainnet, fondos reales ni publicación.
 
 ## Objetivo de v1
 
@@ -16,10 +16,10 @@ Las reglas publicadas actualmente por OpenAI dicen que los plugins pueden vender
 
 Fuente: [OpenAI Plugin Guidelines — Commerce and monetization](https://developers.openai.com/plugins/plugin-guidelines).
 
-## Arquitectura y base existente
+## Arquitectura y referencia
 
-- Reutilizar ScopeProfit como base funcional, en una rama/worktree de trabajo separado. El repo Presu conserva este brief/plan hasta que se decida si será documentación o producto separado.
-- ScopeProfit ya tiene proyectos, mensajes, archivos, Brief validado, preguntas, riesgos, estimaciones, cotizaciones por RateCard y renderizado PDF. Revisar el código actual antes de cambiar contratos.
+- Presu es un producto separado. Este repositorio aloja su código y sus contratos; no extender ni desplegar el backend de ScopeProfit para servir usuarios de Presu.
+- ScopeProfit es referencia de producto y de implementación para proyectos, mensajes, archivos, Brief validado, preguntas, riesgos, estimaciones, RateCard y renderizado PDF. Reimplementar dentro de Presu solo lo que su alcance requiera, con dominio, identidad, persistencia y APIs propios.
 - El backend debe ser la fuente de verdad para proyectos, documentos, alcance, permisos, entitlements y emisión de PDF. ChatGPT no conserva el estado comercial.
 - La integración actual de ChatGPT se plantea como plugin MCP con herramientas backend; una UI embebida es opcional. No construir un segundo agente de conversación: el modelo de ChatGPT dirige el grilling y el backend persiste/valida el resultado.
 - Para una cuenta personal se requiere identidad autenticada y asociación de usuario; no inferir identidad a partir del texto de chat. Usar OAuth 2.1 MCP o el mecanismo admitido por la plataforma seleccionada.
@@ -38,7 +38,7 @@ Fuente: [OpenAI Plugin Guidelines — Commerce and monetization](https://develop
 | Moneda de cotización | Mostrar importe fiduciario según RateCard; no denominar en BNB por defecto | Propuesta |
 | “Idea viable” | Decir “alcance suficientemente definido e implementable” solo si no hay ambigüedades bloqueantes; mostrar evidencia y límites | Definición de trabajo |
 | Fuente de la tarifa | Reutilizar RateCard existente; definir qué RateCard y moneda aplican al usuario ChatGPT | Pendiente |
-| Almacenamiento | Reusar persistencia y storage de ScopeProfit, con autorización por propietario | Propuesta técnica |
+| Almacenamiento | Persistencia y storage propios de Presu, con autorización por propietario | Confirmado |
 
 Una **ambigüedad bloqueante** es un dato ausente, contradictorio o vago que puede cambiar entregables, aceptación, estimación o cotización. El modelo debe registrar pregunta, evidencia/origen, impacto y condición bloqueante. Una respuesta del modelo no es evidencia de mercado por sí misma.
 
@@ -56,7 +56,7 @@ Una **ambigüedad bloqueante** es un dato ausente, contradictorio o vago que pue
 
 ## Tareas del swarm
 
-Las rutas bajo `scope-to-profit/` se refieren al repositorio base, no a este repo Presu. Asignar un agente por tarea. El agente coordinador integra y es el único que modifica Prisma/contratos compartidos; los demás deben trabajar contra los contratos acordados y no editarlos.
+Las rutas `apps/api/` y `apps/web/` se refieren al producto Presu en este repositorio. El agente coordinador integra y es el único que modifica el esquema y contratos compartidos; los demás trabajan contra contratos acordados.
 
 ### P0 — Cerrar restricciones y decisiones restantes de v1
 
@@ -66,7 +66,7 @@ Las rutas bajo `scope-to-profit/` se refieren al repositorio base, no a este rep
 - Confirmar qué planes/cuentas de ChatGPT pueden crear, conectar y usar el plugin MCP en el momento de implementación; no basar la disponibilidad de Presu en la respuesta antigua sobre GPT Actions.
 - Confirmar categorías iniciales, RateCard/moneda, semántica del contador de *grilling* y política de reembolsos.
 - Configurar el importe en wei por crédito, dirección receptora, RPC y mínimo de confirmaciones en el entorno de testnet; si falta algún valor requerido, deshabilitar la compra. No configurar ni habilitar mainnet.
-- Elegir dónde vive el producto ejecutable: extensión de ScopeProfit o repo separado que consuma su API. Recomendación inicial: implementar en ScopeProfit y conservar Presu para brief/decisiones.
+- La ubicación está definida: implementar el producto en el repositorio Presu. No consumir APIs de ScopeProfit en runtime ni modificar su repositorio para completar Presu.
 - Entregar decisiones en una tabla cerrada y actualizar este archivo antes de iniciar tareas que dependan de ellas.
 
 **Aceptación:** las decisiones necesarias para el MVP de créditos/BNB están en la sección anterior; las decisiones restantes tienen dueño y valor antes de implementar las funciones que dependen de ellas; ningún agente implementa checkout en ChatGPT.
@@ -75,7 +75,7 @@ Las rutas bajo `scope-to-profit/` se refieren al repositorio base, no a este rep
 
 **Responsable:** backend lead. **Dependencias:** identidad autenticada y decisiones de créditos/BNB de este brief. **Propiedad exclusiva:** `apps/api/prisma/schema.prisma`, migraciones y contratos compartidos.
 
-- Extender el modelo existente solo para datos faltantes: cuenta de Presu separada de los usuarios profesionales de ScopeProfit, ledger de créditos y referencias verificables de pagos BNB.
+- Crear el modelo de cuenta autenticada de Presu, ledger de créditos y referencias verificables de pagos BNB.
 - Definir operaciones atómicas/idempotentes para consumir un uso, crear cotización y acreditar pago. Fallos de LLM, PDF o pago no deben consumir ni duplicar créditos.
 - Mantener enumeraciones de dominio como enums de Prisma y DTOs validados.
 - Publicar contratos estables y ejemplos de request/response para que P2–P6 integren sin tocar schema ni contratos.
@@ -89,7 +89,7 @@ Las rutas bajo `scope-to-profit/` se refieren al repositorio base, no a este rep
 - Adaptar creación/listado/recuperación de proyectos para usuarios de ChatGPT, revisando la restricción actual de creación profesional.
 - Permitir retomar conversación y adjuntar/consultar documentos en el proyecto correcto.
 - Aplicar autorización de propietario en cada lectura/escritura; validar tipo y tamaño de archivo y mantener almacenamiento privado.
-- Reusar los módulos existentes; no crear persistencia paralela en memoria del MCP.
+- Implementar los módulos de proyecto, chat, documentos y storage dentro de Presu; el MCP no tendrá persistencia paralela en memoria.
 
 **Aceptación:** dos usuarios no pueden consultar proyectos ni documentos ajenos; el propietario puede crear, listar, retomar y adjuntar archivo tras una nueva sesión de ChatGPT.
 
@@ -108,7 +108,7 @@ Las rutas bajo `scope-to-profit/` se refieren al repositorio base, no a este rep
 
 **Responsable:** cotizaciones/documentos. **Dependencias:** P1 y P3. **Archivos principales:** `apps/api/src/modules/pricing/`, `documents/render-quote.ts`.
 
-- Reusar `QuotesService`, RateCard y estimaciones deterministas de ScopeProfit.
+- Implementar en Presu su cotizador, RateCard y estimaciones deterministas tomando como referencia el comportamiento de ScopeProfit.
 - Bloquear cotización final cuando queden ambigüedades bloqueantes; permitir vista preliminar claramente marcada si producto decide soportarla.
 - Generar un PDF cliente que reúna resumen, alcance, incluidos/excluidos, supuestos, riesgos, criterios de aceptación, estimación/precio, vigencia y próximos pasos.
 - Resolver el límite actual de una cotización por proyecto sin perder versiones previas; cada PDF emitido debe ser reproducible e inmutable.
@@ -159,7 +159,7 @@ Referencia oficial y flujo: [OpenAI MCP quickstart — expose locally with ngrok
 
 **Responsable:** coordinador. **Dependencias:** P2–P7.
 
-- Ejecutar scripts existentes de ScopeProfit para typecheck, lint, tests y build; añadir pruebas de integración para autorización, persistencia, gating, PDF y pagos simulados.
+- Ejecutar los scripts propios de Presu para typecheck, lint, tests y build; añadir pruebas de integración para autorización, persistencia, gating, PDF y pagos simulados.
 - Verificar expiración/revocación OAuth, aislamiento de proyectos, límites de archivo, idempotencia, prompt injection desde documentos y manejo de errores del proveedor de modelos.
 - Aceptar el flujo completo: crear proyecto → adjuntar docs → grill y resolver bloqueos → guardar/retomar → emitir PDF → comprobar entitlement.
 - Si se solicita E2E, usar el flujo TesterArmy `opencode-e2e` del repo/global; no sustituirlo por Playwright aislado.

@@ -1,0 +1,7 @@
+allowBuilds:
+  esbuild: true
+minimumReleaseAgeExclude:
+  - ox@0.14.57
+  - viem@2.57.10
+  - xmcp@1.9.0
+  - '@xmcp-dev/compiler@1.9.0'

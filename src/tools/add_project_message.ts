@@ -27,11 +27,7 @@ export default async function addProjectMessage({ projectId, content }: InferSch
       [projectId],
     );
     if (!started.rowCount) {
-      const count = await client.query(
-        'SELECT count(*)::int AS used FROM presu_grilling_usage WHERE user_id = $1',
-        [userId],
-      );
-      if (count.rows[0].used >= 10) throw new Error('FREE_GRILLING_STARTS_EXHAUSTED');
+      // El grilling es ilimitado: se registra el uso para analítica, pero no se bloquea.
       await client.query(
         'INSERT INTO presu_grilling_usage (project_id, user_id) VALUES ($1, $2)',
         [projectId, userId],

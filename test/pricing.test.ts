@@ -1,7 +1,7 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
 import { briefSchema } from '../src/brief.ts';
-import { hasBlockingQuestions, quoteTotals } from '../src/pricing.ts';
+import { creditKindForQuote, hasBlockingQuestions, quoteTotals } from '../src/pricing.ts';
 
 const brief = briefSchema.parse({
   summary: 'Una aplicación', requirements: [], questions: [], risks: [], included: [], excluded: [],
@@ -22,4 +22,10 @@ test('blocks only unresolved questions marked as blocking', () => {
   const pending = { ...brief, questions: [{ id: 'q1', question: '¿Cuál?', reason: 'Cambia el alcance', blocksQuote: true, resolved: false }] };
   assert.equal(hasBlockingQuestions(pending), true);
   assert.equal(hasBlockingQuestions({ ...pending, questions: [{ ...pending.questions[0], resolved: true }] }), false);
+});
+
+test('keeps paid quote credits web-only', () => {
+  assert.equal(creditKindForQuote('mcp', 0, 2), null);
+  assert.equal(creditKindForQuote('web', 0, 2), 'paid_consumption');
+  assert.equal(creditKindForQuote('mcp', 1, 2), 'free_consumption');
 });

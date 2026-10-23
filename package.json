@@ -9,6 +9,8 @@
     "dev": "xmcp dev",
     "build": "xmcp build",
     "start": "node dist/http.js",
+    "dev:payments": "tsx watch src/payments-server.ts",
+    "start:payments": "tsx src/payments-server.ts",
     "migrate": "tsx src/migrate.ts",
     "test": "tsx --test test/*.test.ts",
     "typecheck": "tsc --noEmit"
@@ -16,6 +18,8 @@
   "dependencies": {
     "@opentelemetry/api": "^1.10.0",
     "@xmcp-dev/better-auth": "1.0.0",
+    "better-auth": "^1.6.22",
+    "express": "^5.3.0",
     "pdfkit": "^0.20.2",
     "pg": "^8.23.1",
     "viem": "^2.57.10",
@@ -23,6 +27,7 @@
     "zod": "^4.6.7"
   },
   "devDependencies": {
+    "@types/express": "^5.0.6",
     "@types/node": "^22.20.5",
     "@types/pdfkit": "^0.17.6",
     "@types/pg": "^8.23.1",

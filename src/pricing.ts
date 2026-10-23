@@ -13,3 +13,9 @@ export function quoteTotals(brief: Brief, hourlyRateCents: number) {
 export function hasBlockingQuestions(brief: Brief) {
   return brief.questions.some((question) => question.blocksQuote && !question.resolved);
 }
+
+export function creditKindForQuote(channel: 'mcp' | 'web', free: number, paid: number) {
+  if (free > 0) return 'free_consumption';
+  if (channel === 'web' && paid > 0) return 'paid_consumption';
+  return null;
+}

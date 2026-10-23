@@ -9,7 +9,7 @@ export default async function getQuotePdf({ quoteId }: { quoteId: string }) {
   const { userId } = await getBetterAuthSession();
   await ensureAccount(userId);
   const result = await db.query(
-    'SELECT id, project_id, version, currency, total_min_cents, total_max_cents, pdf FROM presu_quote WHERE id = $1 AND user_id = $2',
+    'SELECT id, project_id, version, currency, total_min_cents, total_max_cents, pdf FROM presu_quote WHERE id = $1 AND user_id = $2 AND mcp_available',
     [quoteId, userId],
   );
   if (!result.rowCount) throw new Error('QUOTE_NOT_FOUND');

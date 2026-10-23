@@ -10,7 +10,7 @@ Al terminar, Presu genera un PDF que presenta el alcance y una cotización comer
 - El modelo determina ambigüedades relevantes; cada ambigüedad debe explicar qué decisión o estimación podría cambiar.
 - No se genera una cotización final mientras queden ambigüedades que bloqueen definir el alcance.
 - Cada cuenta de Presu recibe cinco créditos gratuitos para cotizaciones; los diez usos gratuitos de *grilling with docs* se cuentan por separado.
-- Los pagos adicionales se preparan para la web de Presu con BNB nativo (tBNB) en BSC Testnet. ChatGPT no inicia ni enlaza compras; el uso de créditos pagados desde el plugin requiere aprobación de OpenAI.
+- Los pagos adicionales se hacen desde la web/API de Presu con BNB nativo (tBNB) en BSC Testnet. ChatGPT no inicia ni enlaza compras ni consume créditos pagados; esto requiere aprobación de OpenAI.
 - Se toma [ScopeProfit](https://github.com/FranprzDev/ScopeProfit) como base funcional para el flujo de proyectos, documentos, alcance, estimaciones y PDF.
 
 ## Desarrollo local
@@ -23,7 +23,9 @@ pnpm migrate
 pnpm dev
 ```
 
-El endpoint MCP es `/mcp`. Better Auth ofrece registro e inicio de sesión por email y contraseña y OAuth para clientes MCP. Las herramientas guardan proyectos, mensajes y versiones de alcance por usuario; `issue_quote` bloquea alcances con preguntas pendientes y emite un PDF con la tarifa configurada. La primera cotización persistida descuenta un crédito gratuito. Esta versión no implementa todavía la compra o verificación de pagos BNB; no configures mainnet ni fondos reales.
+El endpoint MCP es `/mcp`. Better Auth ofrece registro e inicio de sesión por email y contraseña y OAuth para clientes MCP. Las herramientas guardan proyectos, mensajes y versiones de alcance; `issue_quote` bloquea alcances con preguntas pendientes y emite un PDF. ChatGPT solo consume los cinco créditos gratuitos.
+
+Para el API web de créditos y pagos, configurá `BNB_TESTNET_RPC_URL`, `BNB_RECEIVER_ADDRESS`, `BNB_CREDIT_PRICE_WEI` y `BNB_MIN_CONFIRMATIONS`, y ejecutá `pnpm dev:payments`. El servicio expone `POST /api/payments/wallet/challenge`, `POST /api/payments/wallet/verify`, `POST /api/payments/intents`, `POST /api/payments/intents/:id/verify`, `GET /api/payments/credits` y `POST /api/quotes/issue`. En desarrollo, el API permite credenciales del origen exacto en `BETTER_AUTH_BASE_URL`; enviá `credentials: 'include'` desde el navegador. En producción, serví MCP y API detrás del mismo origen HTTPS. El API crea importes en backend, comprueba que el RPC sea chain ID 97, valida transferencia nativa y acredita un crédito tras las confirmaciones configuradas. No configures mainnet ni fondos reales.
 
 Validá los cambios con `pnpm typecheck`, `pnpm test` y `pnpm build`.
 

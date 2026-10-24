@@ -1,5 +1,7 @@
 # Presu
 
+![Presu logo](./logo.svg)
+
 Presu ayuda a una persona con una idea de producto a convertirla en un alcance claro mediante una conversación de *grilling with docs* dentro de ChatGPT. El usuario puede guardar proyectos, volver a ellos, responder preguntas y adjuntar documentos para reducir ambigüedades.
 
 Al terminar, Presu genera un PDF que presenta el alcance y una cotización comercial basada en ese alcance. El cliente no ingresa un monto máximo para que el sistema adapte el alcance: “presupuesto” se refiere al documento de propuesta/cotización generado. La evaluación de Presu indica si el proyecto está suficientemente definido y parece implementable; no afirma que exista demanda de mercado sin evidencia.

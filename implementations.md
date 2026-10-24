@@ -31,7 +31,7 @@ Fuente: [OpenAI Plugin Guidelines — Commerce and monetization](https://develop
 |---|---|---|
 | Categorías de cotización | Limitar el primer catálogo a productos de software/digitales que ScopeProfit pueda estimar con su modelo actual | Confirmar antes del catálogo |
 | Créditos gratis | 5 cotizaciones finales emitidas por cuenta de Presu | Confirmado |
-| Grilling gratuito | Hasta 10 inicios de proyecto con grilling por cuenta; seguir conversando o adjuntar docs dentro del mismo proyecto no consume otro uso | Semántica propuesta; confirmar |
+| Grilling gratuito | Ilimitado: crear proyecto, conversar y adjuntar docs no consume créditos ni inicios | Confirmado (decisión de producto) |
 | Cobro después del uso gratis | Web de Presu; un pago exitoso acredita un crédito de cotización. El precio en wei se configura en backend y no se fija en este brief | Confirmado para testnet |
 | BNB | BNB nativo en BSC Testnet (chain ID 97), transferencia directa a una dirección receptora configurada. Sin contrato propio | Confirmado para testnet |
 | Compra desde ChatGPT | No iniciar ni enlazar compras. Consumir créditos pagados desde el plugin queda deshabilitado hasta aprobación explícita de OpenAI | Confirmado como gate |

@@ -9,7 +9,7 @@ Al terminar, Presu genera un PDF que presenta el alcance y una cotización comer
 - El proyecto, la conversación, los documentos y el alcance deben poder guardarse y retomarse.
 - El modelo determina ambigüedades relevantes; cada ambigüedad debe explicar qué decisión o estimación podría cambiar.
 - No se genera una cotización final mientras queden ambigüedades que bloqueen definir el alcance.
-- Cada cuenta de Presu recibe cinco créditos gratuitos para cotizaciones; los diez usos gratuitos de *grilling with docs* se cuentan por separado.
+- Cada cuenta de Presu recibe cinco créditos gratuitos para cotizaciones. El *grilling with docs* es ilimitado; no consume créditos.
 - Los pagos adicionales se hacen desde la web/API de Presu con BNB nativo (tBNB) en BSC Testnet. ChatGPT no inicia ni enlaza compras ni consume créditos pagados; esto requiere aprobación de OpenAI.
 - Se toma [ScopeProfit](https://github.com/FranprzDev/ScopeProfit) como base funcional para el flujo de proyectos, documentos, alcance, estimaciones y PDF.
 

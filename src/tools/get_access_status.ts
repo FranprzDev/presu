@@ -7,17 +7,15 @@ export const metadata = { name: 'get_access_status', description: 'Consulta el s
 export default async function getAccessStatus() {
   const { userId } = await getBetterAuthSession();
   await ensureAccount(userId);
-  const [credits, grilling] = await Promise.all([
-    db.query(
+  const credits = await db.query(
     `SELECT COALESCE(SUM(amount), 0)::int AS credits FROM presu_credit_ledger
-     WHERE user_id = $1 AND kind IN ('free_grant', 'free_consumption')`,
+      WHERE user_id = $1 AND kind IN ('free_grant', 'free_consumption')`,
     [userId],
-    ),
-    db.query('SELECT count(*)::int AS used FROM presu_grilling_usage WHERE user_id = $1', [userId]),
-  ]);
+  );
+  const grilling = await db.query('SELECT count(*)::int AS used FROM presu_grilling_usage WHERE user_id = $1', [userId]);
   const usedGrillingStarts = Number(grilling.rows[0].used);
   return {
     freeQuoteCredits: Number(credits.rows[0].credits),
-    freeGrillingStarts: { used: usedGrillingStarts, remaining: Math.max(0, 10 - usedGrillingStarts) },
+    freeGrillingStarts: { used: usedGrillingStarts, remaining: null, unlimited: true },
   };
 }

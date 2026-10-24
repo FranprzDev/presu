@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Presu — De idea a cotización en ChatGPT</title>
+  <meta name="description" content="Presu convierte tu idea de producto en un alcance claro y una cotización PDF, directamente desde ChatGPT. Grilling with docs, ambigüedades resueltas, PDF listo para enviar." />
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            crimson: { 50:'#fdf2f3', 100:'#fce4e6', 200:'#f9c9ce', 300:'#f4a0a8', 400:'#ec6d7a', 500:'#dc3a4e', 600:'#b01e2f', 700:'#8a1423', 800:'#6b101b', 900:'#4a0c13' },
+            ink: { 900:'#0b0c0e', 700:'#1f1812', 500:'#4f5561', 300:'#8a8f98' },
+            cream: '#e6d4b8',
+          },
+          fontFamily: { display: ['Inter','system-ui','sans-serif'], body: ['Inter','system-ui','sans-serif'] },
+        }
+      }
+    }
+  </script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    html { scroll-behavior: smooth; }
+    .hero-glow { background: radial-gradient(60% 60% at 50% 40%, rgba(176,30,47,0.18) 0%, rgba(176,30,47,0) 70%); }
+    .card-hover { transition: transform .25s ease, box-shadow .25s ease; }
+    .card-hover:hover { transform: translateY(-4px); box-shadow: 0 20px 40px -12px rgba(176,30,47,0.25); }
+    @keyframes float { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-8px)} }
+    .float { animation: float 4s ease-in-out infinite; }
+    .reveal { opacity:0; transform:translateY(20px); transition: opacity .7s ease, transform .7s ease; }
+    .reveal.in { opacity:1; transform:none; }
+  </style>
+</head>
+<body class="bg-white text-ink-700 font-body antialiased">
+
+  <!-- Nav -->
+  <nav class="fixed top-0 inset-x-0 z-50 bg-white/80 backdrop-blur-md border-b border-gray-100">
+    <div class="max-w-6xl mx-auto px-6 h-16 flex items-center justify-between">
+      <a href="#" class="flex items-center gap-3">
+        <img src="/logo.svg" alt="Presu" class="h-9 w-9" onerror="this.style.display='none'" />
+        <span class="font-display font-bold text-xl tracking-tight text-ink-900">Presu</span>
+      </a>
+      <div class="hidden md:flex items-center gap-8 text-sm font-medium text-ink-500">
+        <a href="#como" class="hover:text-crimson-600 transition">Cómo funciona</a>
+        <a href="#precios" class="hover:text-crimson-600 transition">Precios</a>
+        <a href="#pagos" class="hover:text-crimson-600 transition">Pagos</a>
+      </div>
+      <a href="#cta" class="bg-crimson-600 hover:bg-crimson-700 text-white text-sm font-semibold px-5 py-2.5 rounded-full transition">Empezar gratis</a>
+    </div>
+  </nav>
+
+  <!-- Hero -->
+  <section class="relative pt-32 pb-20 overflow-hidden">
+    <div class="hero-glow absolute inset-0 pointer-events-none"></div>
+    <div class="max-w-6xl mx-auto px-6 grid md:grid-cols-2 gap-12 items-center">
+      <div>
+        <span class="inline-flex items-center gap-2 text-xs font-semibold uppercase tracking-widest text-crimson-600 bg-crimson-50 px-3 py-1.5 rounded-full">Para ChatGPT · Plugin MCP</span>
+        <h1 class="mt-6 font-display font-extrabold text-5xl md:text-6xl leading-[1.05] tracking-tight text-ink-900">
+          De idea a <span class="text-crimson-600">cotización</span> en una conversación.
+        </h1>
+        <p class="mt-6 text-lg text-ink-500 leading-relaxed max-w-xl">
+          Presu te ayuda a convertir una idea de producto en un alcance claro y una cotización PDF, directamente desde ChatGPT. Adjunta documentos, resuelve ambigüedades y obtén un presupuesto listo para enviar.
+        </p>
+        <div class="mt-8 flex flex-wrap gap-4">
+          <a href="#cta" class="bg-crimson-600 hover:bg-crimson-700 text-white font-semibold px-7 py-3.5 rounded-full transition shadow-lg shadow-crimson-600/25">Empezar gratis</a>
+          <a href="#como" class="border border-gray-200 hover:border-crimson-600 text-ink-700 font-semibold px-7 py-3.5 rounded-full transition">Ver cómo funciona</a>
+        </div>
+        <p class="mt-4 text-sm text-ink-300">5 cotizaciones gratuitas por cuenta · Grilling ilimitado · Sin tarjeta</p>
+      </div>
+      <div class="relative float">
+        <div class="bg-gradient-to-br from-crimson-50 to-white rounded-3xl p-8 shadow-2xl border border-crimson-100">
+          <img src="/logo.svg" alt="Presu logo" class="w-40 h-40 mx-auto" onerror="this.style.display='none'" />
+          <div class="mt-6 space-y-3">
+            <div class="flex items-center gap-3 bg-white rounded-xl px-4 py-3 shadow-sm">
+              <div class="w-2 h-2 rounded-full bg-crimson-600"></div>
+              <span class="text-sm text-ink-700">Proyecto creado · Alcance guardado</span>
+            </div>
+            <div class="flex items-center gap-3 bg-white rounded-xl px-4 py-3 shadow-sm">
+              <div class="w-2 h-2 rounded-full bg-crimson-600"></div>
+              <span class="text-sm text-ink-700">3 ambigüedades resueltas</span>
+            </div>
+            <div class="flex items-center gap-3 bg-crimson-600 text-white rounded-xl px-4 py-3 shadow-sm">
+              <div class="w-2 h-2 rounded-full bg-white"></div>
+              <span class="text-sm font-semibold">Cotización PDF emitida ✓</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Cómo funciona -->
+  <section id="como" class="py-24 bg-gray-50">
+    <div class="max-w-6xl mx-auto px-6">
+      <div class="text-center max-w-2xl mx-auto">
+        <h2 class="font-display font-bold text-4xl tracking-tight text-ink-900">Cómo funciona</h2>
+        <p class="mt-4 text-ink-500">Cuatro pasos, todo dentro de ChatGPT.</p>
+      </div>
+      <div class="mt-16 grid md:grid-cols-4 gap-6">
+        <div class="bg-white rounded-2xl p-6 card-hover border border-gray-100">
+          <div class="w-12 h-12 rounded-xl bg-crimson-50 text-crimson-600 flex items-center justify-center font-display font-bold text-xl">1</div>
+          <h3 class="mt-5 font-semibold text-ink-900">Crea un proyecto</h3>
+          <p class="mt-2 text-sm text-ink-500">Dale un nombre a tu idea. Presu guarda tu proyecto para que puedas retomarlo cuando quieras.</p>
+        </div>
+        <div class="bg-white rounded-2xl p-6 card-hover border border-gray-100">
+          <div class="w-12 h-12 rounded-xl bg-crimson-50 text-crimson-600 flex items-center justify-center font-display font-bold text-xl">2</div>
+          <h3 class="mt-5 font-semibold text-ink-900">Grilling with docs</h3>
+          <p class="mt-2 text-sm text-ink-500">ChatGPT te hace preguntas y usa tus documentos para aclarar el alcance. Ilimitado, no consume créditos.</p>
+        </div>
+        <div class="bg-white rounded-2xl p-6 card-hover border border-gray-100">
+          <div class="w-12 h-12 rounded-xl bg-crimson-50 text-crimson-600 flex items-center justify-center font-display font-bold text-xl">3</div>
+          <h3 class="mt-5 font-semibold text-ink-900">Resuelve ambigüedades</h3>
+          <p class="mt-2 text-sm text-ink-500">Presu detecta datos faltantes o contradictorios y te pregunta antes de cerrar el alcance.</p>
+        </div>
+        <div class="bg-white rounded-2xl p-6 card-hover border border-gray-100">
+          <div class="w-12 h-12 rounded-xl bg-crimson-50 text-crimson-600 flex items-center justify-center font-display font-bold text-xl">4</div>
+          <h3 class="mt-5 font-semibold text-ink-900">Emite la cotización</h3>
+          <p class="mt-2 text-sm text-ink-500">Con el alcance definido, generas un PDF con alcance, riesgos y precio. Consume 1 crédito gratuito.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Features -->
+  <section class="py-24">
+    <div class="max-w-6xl mx-auto px-6 grid md:grid-cols-3 gap-8">
+      <div class="p-8 rounded-2xl bg-gradient-to-br from-crimson-600 to-crimson-800 text-white">
+        <h3 class="font-display font-bold text-2xl">Alcance trazable</h3>
+        <p class="mt-3 text-crimson-100">Cada requisito cita el mensaje o documento de origen. Nada inventado, todo verificable.</p>
+      </div>
+      <div class="p-8 rounded-2xl bg-gray-50 border border-gray-100">
+        <h3 class="font-display font-bold text-2xl text-ink-900">Ambigüedades bloqueantes</h3>
+        <p class="mt-3 text-ink-500">Presu no emite cotización final mientras queden preguntas que puedan cambiar el alcance o el precio.</p>
+      </div>
+      <div class="p-8 rounded-2xl bg-gray-50 border border-gray-100">
+        <h3 class="font-display font-bold text-2xl text-ink-900">PDF inmutable</h3>
+        <p class="mt-3 text-ink-500">Cada cotización queda guardada con su versión del alcance. Reproducible e identificable.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Precios -->
+  <section id="precios" class="py-24 bg-gray-50">
+    <div class="max-w-4xl mx-auto px-6 text-center">
+      <h2 class="font-display font-bold text-4xl tracking-tight text-ink-900">Precios simples</h2>
+      <p class="mt-4 text-ink-500">Empieza gratis. Paga solo cuando necesites más cotizaciones.</p>
+      <div class="mt-12 grid md:grid-cols-2 gap-6">
+        <div class="bg-white rounded-2xl p-8 border border-gray-200 text-left">
+          <h3 class="font-display font-bold text-2xl text-ink-900">Gratis</h3>
+          <p class="mt-2 text-ink-500">Para probar Presu en ChatGPT.</p>
+          <div class="mt-6 text-4xl font-display font-extrabold text-ink-900">$0</div>
+          <ul class="mt-6 space-y-3 text-sm text-ink-700">
+            <li class="flex gap-2"><span class="text-crimson-600">✓</span> 5 cotizaciones PDF gratuitas</li>
+            <li class="flex gap-2"><span class="text-crimson-600">✓</span> Grilling ilimitado</li>
+            <li class="flex gap-2"><span class="text-crimson-600">✓</span> Proyectos, mensajes y documentos guardados</li>
+            <li class="flex gap-2"><span class="text-crimson-600">✓</span> Alcance y ambigüedades</li>
+          </ul>
+        </div>
+        <div class="bg-crimson-600 rounded-2xl p-8 text-white text-left shadow-xl shadow-crimson-600/30">
+          <h3 class="font-display font-bold text-2xl">Créditos adicionales</h3>
+          <p class="mt-2 text-crimson-100">Cuando se te acaben los 5 gratis.</p>
+          <div class="mt-6 text-4xl font-display font-extrabold">1 crédito</div>
+          <p class="text-sm text-crimson-100">por cotización emitida</p>
+          <ul class="mt-6 space-y-3 text-sm">
+            <li class="flex gap-2"><span>✓</span> Compra en la web de Presu</li>
+            <li class="flex gap-2"><span>✓</span> Pago con BNB (BSC Testnet)</li>
+            <li class="flex gap-2"><span>✓</span> Acreditación tras confirmaciones</li>
+            <li class="flex gap-2"><span>✓</span> Uso en la web (no en el plugin)</li>
+          </ul>
+          <a href="#pagos" class="mt-6 inline-block bg-white text-crimson-600 font-semibold px-6 py-3 rounded-full hover:bg-crimson-50 transition">Comprar créditos</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Pagos -->
+  <section id="pagos" class="py-24">
+    <div class="max-w-4xl mx-auto px-6">
+      <div class="bg-ink-900 rounded-3xl p-10 md:p-14 text-white relative overflow-hidden">
+        <div class="absolute -top-20 -right-20 w-64 h-64 bg-crimson-600/20 rounded-full blur-3xl"></div>
+        <h2 class="font-display font-bold text-3xl md:text-4xl tracking-tight">Pagos con BNB (Testnet)</h2>
+        <p class="mt-4 text-gray-300 max-w-2xl">La compra de créditos ocurre en la web de Presu, fuera del plugin de ChatGPT (según las reglas de OpenAI). Conecta tu wallet, firma una transferencia de tBNB y el backend acredita el crédito tras las confirmaciones.</p>
+        <div class="mt-8 grid md:grid-cols-3 gap-4 text-sm">
+          <div class="bg-white/5 border border-white/10 rounded-xl p-4">
+            <div class="font-semibold text-crimson-400">Red</div>
+            <div class="mt-1 text-gray-200">BSC Testnet (chain ID 97)</div>
+          </div>
+          <div class="bg-white/5 border border-white/10 rounded-xl p-4">
+            <div class="font-semibold text-crimson-400">Activo</div>
+            <div class="mt-1 text-gray-200">BNB nativo (tBNB)</div>
+          </div>
+          <div class="bg-white/5 border border-white/10 rounded-xl p-4">
+            <div class="font-semibold text-crimson-400">Seguridad</div>
+            <div class="mt-1 text-gray-200">Verificación on-chain en backend</div>
+          </div>
+        </div>
+        <p class="mt-6 text-xs text-gray-400">⚠ Solo testnet. Sin fondos reales. Mainnet requiere autorización posterior.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <section id="cta" class="py-24">
+    <div class="max-w-3xl mx-auto px-6 text-center">
+      <h2 class="font-display font-bold text-4xl tracking-tight text-ink-900">Empieza a definir tu idea hoy</h2>
+      <p class="mt-4 text-ink-500">Crea tu cuenta, conecta el plugin MCP en ChatGPT y genera tu primera cotización gratis.</p>
+      <div class="mt-8 flex flex-wrap justify-center gap-4">
+        <a href="#" class="bg-crimson-600 hover:bg-crimson-700 text-white font-semibold px-8 py-4 rounded-full transition shadow-lg shadow-crimson-600/25">Crear cuenta gratis</a>
+        <a href="https://github.com/FranprzDev/presu" target="_blank" class="border border-gray-200 hover:border-crimson-600 text-ink-700 font-semibold px-8 py-4 rounded-full transition">Ver en GitHub</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="border-t border-gray-100 py-10">
+    <div class="max-w-6xl mx-auto px-6 flex flex-col md:flex-row items-center justify-between gap-4 text-sm text-ink-300">
+      <div class="flex items-center gap-3">
+        <img src="/logo.svg" alt="Presu" class="h-6 w-6" onerror="this.style.display='none'" />
+        <span>© 2026 Presu. Hecho con cariño.</span>
+      </div>
+      <div class="flex gap-6">
+        <a href="https://github.com/FranprzDev/presu" class="hover:text-crimson-600 transition">GitHub</a>
+        <a href="#" class="hover:text-crimson-600 transition">Documentación</a>
+        <a href="#" class="hover:text-crimson-600 transition">Contacto</a>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    // Reveal on scroll
+    const obs = new IntersectionObserver((entries) => {
+      entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('in'); });
+    }, { threshold: 0.15 });
+    document.querySelectorAll('.reveal').forEach(el => obs.observe(el));
+  </script>
+</body>
+</html>
+PYEOF
+echo "written"

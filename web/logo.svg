@@ -1,0 +1,59 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" width="200" height="200" role="img" aria-label="Presu">
+  <title>Presu</title>
+  <defs>
+    <linearGradient id="hat" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#c92a3f"/>
+      <stop offset="1" stop-color="#8a1423"/>
+    </linearGradient>
+    <linearGradient id="body" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#3a2e26"/>
+      <stop offset="1" stop-color="#1f1812"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Laptop -->
+  <g>
+    <!-- Lid -->
+    <rect x="38" y="118" width="124" height="62" rx="8" fill="url(#hat)"/>
+    <!-- Screen -->
+    <rect x="46" y="126" width="108" height="46" rx="4" fill="#0b0c0e"/>
+    <!-- Code lines -->
+    <rect x="54" y="134" width="34" height="3" rx="1.5" fill="#c92a3f"/>
+    <rect x="54" y="142" width="52" height="3" rx="1.5" fill="#4f5561"/>
+    <rect x="54" y="150" width="26" height="3" rx="1.5" fill="#c92a3f"/>
+    <rect x="54" y="158" width="44" height="3" rx="1.5" fill="#4f5561"/>
+    <!-- Base -->
+    <rect x="30" y="180" width="140" height="10" rx="4" fill="#1f1812"/>
+    <rect x="40" y="182" width="120" height="6" rx="2" fill="#2a2a2a"/>
+  </g>
+
+  <!-- Platypus head -->
+  <ellipse cx="100" cy="78" rx="52" ry="44" fill="url(#body)"/>
+
+  <!-- Hat -->
+  <ellipse cx="100" cy="40" rx="62" ry="11" fill="url(#hat)"/>
+  <path d="M48 40 C48 18 70 8 100 6 C130 8 152 18 152 40 Z" fill="url(#hat)"/>
+  <path d="M48 34 Q100 40 152 34 L152 40 Q100 46 48 40 Z" fill="#5a0f18"/>
+
+  <!-- Bill -->
+  <ellipse cx="100" cy="96" rx="40" ry="16" fill="#e6d4b8"/>
+  <ellipse cx="100" cy="100" rx="34" ry="7" fill="#cbb692" opacity="0.6"/>
+
+  <!-- Eyes -->
+  <circle cx="84" cy="70" r="7" fill="#fff"/>
+  <circle cx="116" cy="70" r="7" fill="#fff"/>
+  <circle cx="86" cy="71" r="3.5" fill="#1a1410"/>
+  <circle cx="118" cy="71" r="3.5" fill="#1a1410"/>
+  <circle cx="87" cy="69" r="1.4" fill="#fff"/>
+  <circle cx="119" cy="69" r="1.4" fill="#fff"/>
+
+  <!-- Nostrils -->
+  <circle cx="92" cy="94" r="2" fill="#8a7a6a"/>
+  <circle cx="108" cy="94" r="2" fill="#8a7a6a"/>
+
+  <!-- Arms -->
+  <path d="M52 90 Q38 130 46 180" stroke="#1f1812" stroke-width="8" stroke-linecap="round" fill="none"/>
+  <path d="M148 90 Q162 130 154 180" stroke="#1f1812" stroke-width="8" stroke-linecap="round" fill="none"/>
+  <circle cx="46" cy="180" r="5" fill="#3a2e26"/>
+  <circle cx="154" cy="180" r="5" fill="#3a2e26"/>
+</svg>
